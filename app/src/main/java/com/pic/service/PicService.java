@@ -9,6 +9,6 @@ public class PicService implements IPicService {
 
     @Override
     public Page getPage(String feature, String consumerKey) {
-        return RestClient.getRestClient().getPage(feature,consumerKey);
+        return RestClient.getRestInterface().getPage(feature,consumerKey);
     }
 }

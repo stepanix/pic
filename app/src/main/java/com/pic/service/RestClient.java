@@ -12,35 +12,32 @@ import retrofit.converter.GsonConverter;
 
 public class RestClient {
 
-    private static RestClient service;
+    private static RestInterface restInterface;
 
-    private static RestInterface REST_INTERFACE;
-
-    static{
+    static {
         initRestArtifacts();
     }
 
-    private static void initRestArtifacts()
-    {
-        Gson gson = new GsonBuilder()
-                .create();
-        RestAdapter restAdapter = new RestAdapter.Builder()
-                .setEndpoint(AppConfig.SERVICE_URL)
-                .setConverter(new GsonConverter(gson))
-                .setClient(new OkClient(new OkHttpClient()))
-                .build();
-        REST_INTERFACE = restAdapter.create(RestInterface.class);
+    private static void initRestArtifacts() {
+        if (restInterface == null) {
+            Gson gson = new GsonBuilder()
+                    .create();
+            RestAdapter restAdapter = new RestAdapter.Builder()
+                    .setEndpoint(AppConfig.SERVICE_URL)
+                    .setConverter(new GsonConverter(gson))
+                    .setClient(new OkClient(new OkHttpClient()))
+                    .build();
+            restInterface = restAdapter.create(RestInterface.class);
+        }
     }
 
-    public RestClient(){
-     //constructor
+    private RestClient() {
+        //constructor
     }
 
-    public static RestInterface getRestClient()
-    {
-        return REST_INTERFACE;
+    public static RestInterface getRestInterface() {
+        return restInterface;
     }
-
 
 
 }
