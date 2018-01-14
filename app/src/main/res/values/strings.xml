@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">pic</string>
+    <string name="global_loading_error">Oops! an error occurred</string>
+</resources>

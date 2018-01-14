@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/beneficiary_management_make_a_once_off_payment_card"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginRight="@dimen/global_margin_16dp"
+    android:layout_marginLeft="@dimen/global_margin_16dp"
+    android:layout_marginBottom="@dimen/global_margin_16dp">
+
+    <LinearLayout
+        android:padding="@dimen/global_padding"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/image_view"
+        android:padding="@dimen/global_padding"
+        android:layout_width="@dimen/global_width"
+        android:layout_gravity="center"
+        android:layout_height="@dimen/global_height"/>
+
+    <TextView
+        android:id="@+id/text_view"
+        android:gravity="center"
+        android:background="@color/colorWhite"
+        android:layout_gravity="center"
+        android:padding="@dimen/global_padding"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+</android.support.v7.widget.CardView>
