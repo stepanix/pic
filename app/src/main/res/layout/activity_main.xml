@@ -26,6 +26,14 @@
             app:layoutManager="LinearLayoutManager"
             app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
+        <ImageView
+            android:id="@+id/image_view_refresh"
+            android:layout_below="@+id/photo_recycler_view"
+            android:src="@drawable/ic_refresh_black_24dp"
+            android:layout_width="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_height="wrap_content" />
+
     </RelativeLayout>
 
 

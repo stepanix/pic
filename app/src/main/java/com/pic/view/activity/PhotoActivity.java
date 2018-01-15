@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.pic.R;
@@ -24,17 +25,34 @@ public class PhotoActivity extends AppCompatActivity implements IPhotoView {
     private PhotoAdapter photoAdapter;
     private PhotoViewModel viewModel;
     private View progressViewLayout;
+    private ImageView imageViewRefresh;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         viewModel = new PhotoViewModel(this, PageRepoFactory.getRepository());
+        photoAdapter = new PhotoAdapter(this, this);
+
         RecyclerView photoRecyclerView = findViewById(R.id.photo_recycler_view);
         progressViewLayout = findViewById(R.id.layout_progress_bar);
+        imageViewRefresh = findViewById(R.id.image_view_refresh);
+
+        imageViewRefresh.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v)
+            {
+                refresh();
+            }
+        });
+
         progressViewLayout.setVisibility(View.VISIBLE);
-        photoAdapter = new PhotoAdapter(this, this);
         photoRecyclerView.setAdapter(photoAdapter);
+        viewModel.loadPictures();
+    }
+
+    private void refresh() {
+        progressViewLayout.setVisibility(View.VISIBLE);
+        imageViewRefresh.setVisibility(View.GONE);
         viewModel.loadPictures();
     }
 
@@ -46,7 +64,9 @@ public class PhotoActivity extends AppCompatActivity implements IPhotoView {
 
     @Override
     public void onGetPageError() {
+        imageViewRefresh.setVisibility(View.VISIBLE);
         progressViewLayout.setVisibility(View.GONE);
+        photoAdapter.setLoaded();
         Toast.makeText(this, getString(R.string.global_loading_error), Toast.LENGTH_SHORT).show();
         Log.e(TAG, "Error processing page service");
     }
