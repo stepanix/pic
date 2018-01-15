@@ -2,6 +2,7 @@ package com.pic.view.activity;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
@@ -15,8 +16,6 @@ import com.pic.view.adapter.PhotoAdapter;
 import com.pic.view.viewinterface.IPhotoView;
 import com.pic.viewmodel.PhotoViewModel;
 
-import java.io.IOException;
-
 
 public class PhotoActivity extends AppCompatActivity implements IPhotoView {
 
@@ -26,6 +25,8 @@ public class PhotoActivity extends AppCompatActivity implements IPhotoView {
     private PhotoViewModel viewModel;
     private View progressViewLayout;
     private ImageView imageViewRefresh;
+    private RecyclerView photoRecyclerView;
+    LinearLayoutManager layoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,27 +34,26 @@ public class PhotoActivity extends AppCompatActivity implements IPhotoView {
         setContentView(R.layout.activity_main);
         viewModel = new PhotoViewModel(this, PageRepoFactory.getRepository());
         photoAdapter = new PhotoAdapter(this, this);
-
-        RecyclerView photoRecyclerView = findViewById(R.id.photo_recycler_view);
+        photoRecyclerView = findViewById(R.id.photo_recycler_view);
         progressViewLayout = findViewById(R.id.layout_progress_bar);
         imageViewRefresh = findViewById(R.id.image_view_refresh);
 
         imageViewRefresh.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v)
-            {
+            public void onClick(View v) {
                 refresh();
             }
         });
 
+        layoutManager = (LinearLayoutManager) photoRecyclerView.getLayoutManager();
         progressViewLayout.setVisibility(View.VISIBLE);
         photoRecyclerView.setAdapter(photoAdapter);
         viewModel.loadPictures();
     }
 
     private void refresh() {
-        progressViewLayout.setVisibility(View.VISIBLE);
         imageViewRefresh.setVisibility(View.GONE);
-        viewModel.loadPictures();
+        layoutManager.scrollToPositionWithOffset((photoAdapter.getItemCount() - 1), 0);
+        photoAdapter.reload();
     }
 
     @Override
@@ -66,7 +66,8 @@ public class PhotoActivity extends AppCompatActivity implements IPhotoView {
     public void onGetPageError() {
         imageViewRefresh.setVisibility(View.VISIBLE);
         progressViewLayout.setVisibility(View.GONE);
-        photoAdapter.setLoaded();
+        photoAdapter.setItems(null);
+        layoutManager.scrollToPositionWithOffset(0, 0);
         Toast.makeText(this, getString(R.string.global_loading_error), Toast.LENGTH_SHORT).show();
         Log.e(TAG, "Error processing page service");
     }

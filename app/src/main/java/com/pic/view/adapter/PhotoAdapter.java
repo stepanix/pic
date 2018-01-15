@@ -30,7 +30,7 @@ public class PhotoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     private static final int VIEW_TYPE_ITEM = 0;
     private static final int VIEW_TYPE_LOADING = 1;
 
-    public PhotoAdapter(Context context,IPhotoView onLoadMoreListener) {
+    public PhotoAdapter(Context context, IPhotoView onLoadMoreListener) {
         this.context = context;
         this.onLoadMoreListener = onLoadMoreListener;
         this.photoList = new ArrayList<>();
@@ -58,12 +58,20 @@ public class PhotoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         });
     }
 
+    public void reload() {
+        onLoadMoreListener.onLoadMore();
+        isLoading = true;
+    }
+
     public void setLoaded() {
         isLoading = false;
     }
 
     public void setItems(List<Photo> photoList) {
-        this.photoList.addAll(photoList);
+        if (photoList != null) {
+            this.photoList.addAll(photoList);
+            notifyItemInserted(photoList.size());
+        }
         notifyDataSetChanged();
         setLoaded();
     }
